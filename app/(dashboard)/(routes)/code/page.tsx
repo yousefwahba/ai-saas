@@ -6,22 +6,22 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { useChat } from "ai/react";
-import { MessageSquare } from "lucide-react";
+import { Code } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 
-export default function ChatPage() {
+export default function CodePage() {
   const { messages, input, handleInputChange, handleSubmit } = useChat({
-    api: "api/conversation",
+    api: "api/code",
   });
 
   return (
     <div>
       <Heading
-        title="Conversation"
-        description="Our most advanced conversation model."
-        icon={MessageSquare}
-        iconColor="text-violet-500"
-        bgColor="bg-violet-500/10"
+        title="Code Generation"
+        description="Generate code using descriptive text."
+        icon={Code}
+        iconColor="text-violet-700"
+        bgColor="bg-violet-700/10"
       />
       <div className="px-4 lg:px-8">
         <form
@@ -34,7 +34,7 @@ export default function ChatPage() {
             <Input
               className="border-0 outline-none focus-visible:ring-0 focus-visible:ring-transparent"
               value={input}
-              placeholder="Say something..."
+              placeholder="Simple toggle button using React hooks."
               onChange={handleInputChange}
             />
           </div>
@@ -56,7 +56,7 @@ export default function ChatPage() {
                 )}
               >
                 {message.role === "user" ? "" : <BotAvatar />}
-                <p className="text-sm">
+                <div className="text-sm overflow-auto">
                   <ReactMarkdown
                     components={{
                       pre: ({ node, ...props }) => (
@@ -75,7 +75,7 @@ export default function ChatPage() {
                   >
                     {message.content}
                   </ReactMarkdown>
-                </p>
+                </div>
               </div>
             ))}
           </div>
