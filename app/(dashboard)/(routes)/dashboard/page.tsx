@@ -4,10 +4,10 @@ import { cn } from "@/lib/utils";
 import { UserButton } from "@clerk/nextjs";
 import {
   ArrowRight,
+  AudioLines,
   Code,
   ImageIcon,
   MessageSquare,
-  Music,
   VideoIcon,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -35,9 +35,9 @@ const tools = [
     bgColor: "bg-orange-700/10",
   },
   {
-    name: "Sound Generation",
-    icon: Music,
-    href: "/sound",
+    name: "Text To Speech",
+    icon: AudioLines,
+    href: "/voice",
     color: "text-emerald-500",
     bgColor: "bg-emerald-500/10",
   },

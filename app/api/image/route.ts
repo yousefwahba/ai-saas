@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(output, { status: 200 });
   } catch (error: unknown) {
-    console.error("[MUSIC_ERROR]: ", error);
+    console.error("[IMAGE_ERROR]: ", error);
     return new NextResponse("Internal server error.", { status: 500 });
   }
 }

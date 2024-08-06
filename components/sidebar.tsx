@@ -6,11 +6,11 @@ import Link from "next/link";
 
 import { cn } from "@/lib/utils";
 import {
+  AudioLines,
   Code,
   ImageIcon,
   LayoutDashboard,
   MessageSquare,
-  Music,
   Settings,
   VideoIcon,
 } from "lucide-react";
@@ -47,9 +47,9 @@ const routes = [
     color: "text-orange-700",
   },
   {
-    name: "Sound Generation",
-    icon: Music,
-    href: "/sound",
+    name: "Text To Speech",
+    icon: AudioLines,
+    href: "/voice",
     color: "text-emerald-500",
   },
   {
