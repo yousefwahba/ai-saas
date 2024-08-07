@@ -1,4 +1,5 @@
 "use client";
+import { useRouter } from "next/navigation";
 import { BotAvatar } from "@/components/bot-avatar";
 import { Empty } from "@/components/empty";
 import { Heading } from "@/components/heading";
@@ -10,8 +11,10 @@ import { MessageSquare } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 
 export default function ChatPage() {
+  const router = useRouter();
   const { messages, input, handleInputChange, handleSubmit } = useChat({
     api: "api/conversation",
+    onFinish: () => router.refresh(),
   });
 
   return (

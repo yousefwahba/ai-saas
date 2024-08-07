@@ -39,7 +39,7 @@ export default function CodePage() {
             />
           </div>
           <Button type="submit" className="col-span-12 lg:col-span-2 w-full">
-            Send
+            Generate
           </Button>
         </form>
         <div className="space-y-4 mt-4">
