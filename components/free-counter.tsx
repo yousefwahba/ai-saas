@@ -7,12 +7,14 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { MAX_FREE_COUNTS } from "@/constants";
+import { useProModel } from "@/hooks/use-pro-model";
 
 type FreeCounterProps = {
   apiLimitCount: number;
 };
 
 export const FreeCounter = ({ apiLimitCount = 0 }: FreeCounterProps) => {
+  const proModel = useProModel();
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
@@ -33,12 +35,14 @@ export const FreeCounter = ({ apiLimitCount = 0 }: FreeCounterProps) => {
             <Progress
               className="h-3 text-white"
               value={(apiLimitCount / MAX_FREE_COUNTS) * 100}
-
-              // indicatorColor="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"
             />
           </div>
 
-          <Button variant="premium" className="w-full">
+          <Button
+            onClick={proModel.onOpen}
+            variant="premium"
+            className="w-full"
+          >
             Upgrade <Zap className="w-4 h-4 ml-2 fill-white" />
           </Button>
         </CardContent>
