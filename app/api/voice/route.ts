@@ -1,10 +1,23 @@
+import { checkApiLimit, increaseApiLimit } from "@/lib/api-limit";
+import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
-  const body = await req.json();
-  const { prompt } = body;
-  const voice = "21m00Tcm4TlvDq8ikWAM";
   try {
+    const { userId } = auth();
+    const body = await req.json();
+    const { prompt } = body;
+    const voice = "ErXwobaYiN019PkySvjV";
+
+    if (!userId) return new NextResponse("Unauthorized.", { status: 401 });
+
+    if (!prompt)
+      return new NextResponse("Prompt is required.", { status: 400 });
+
+    const freeTrial = await checkApiLimit();
+    if (!freeTrial) {
+      return new NextResponse("API limit exceeded.", { status: 403 });
+    }
     const options = {
       method: "POST",
       headers: {
@@ -19,9 +32,11 @@ export async function POST(req: Request) {
     };
 
     const response = await fetch(
-      "https://api.elevenlabs.io/v1/text-to-speech/nPczCjzI2devNBz1zQrb",
+      `https://api.elevenlabs.io/v1/text-to-speech/${voice}`,
       options
     );
+
+    await increaseApiLimit();
 
     if (!response.ok) {
       throw new Error(`Error: ${response.statusText}`);

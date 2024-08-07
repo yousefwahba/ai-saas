@@ -1,6 +1,7 @@
 import { auth } from "@clerk/nextjs/server";
 import { type NextRequest, NextResponse } from "next/server";
 import Replicate from "replicate";
+import { increaseApiLimit, checkApiLimit } from "@/lib/api-limit";
 
 const replicate = new Replicate({
   auth: process.env.REPLICATE_API_TOKEN,
@@ -29,9 +30,16 @@ export async function POST(req: NextRequest) {
       prompt_strength: 0.85,
     };
 
+    const freeTrial = await checkApiLimit();
+    if (!freeTrial) {
+      return new NextResponse("API limit exceeded.", { status: 403 });
+    }
+
     const output = await replicate.run("stability-ai/stable-diffusion-3", {
       input,
     });
+
+    await increaseApiLimit();
 
     return NextResponse.json(output, { status: 200 });
   } catch (error: unknown) {
