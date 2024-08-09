@@ -4,14 +4,23 @@ import { Empty } from "@/components/empty";
 import { Heading } from "@/components/heading";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useProModel } from "@/hooks/use-pro-model";
 import { cn } from "@/lib/utils";
 import { useChat } from "ai/react";
 import { Code } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 
 export default function CodePage() {
+  const proModel = useProModel();
+
   const { messages, input, handleInputChange, handleSubmit } = useChat({
     api: "api/code",
+    onError(error) {},
+    onResponse: (response) => {
+      if (response?.status === 403) {
+        proModel.onOpen();
+      }
+    },
   });
 
   return (

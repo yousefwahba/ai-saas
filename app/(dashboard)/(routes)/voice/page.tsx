@@ -15,8 +15,11 @@ import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { voiceFormSchema } from "./constants";
+import { useProModel } from "@/hooks/use-pro-model";
 
 const VoicePage = () => {
+  const proModel = useProModel();
+
   const router = useRouter();
   const [audioUrl, setAudioUrl] = useState("");
 
@@ -40,18 +43,30 @@ const VoicePage = () => {
         },
         body: JSON.stringify({ prompt: values.prompt }),
       });
+
       if (!response.ok) {
-        console.error("Error:", response.statusText);
-        return;
+        console.log(response);
+        throw new Error(`Request failed with status ${response.status}`);
       }
 
       const audioBlob = await response.blob();
       const audioUrl = URL.createObjectURL(audioBlob);
       setAudioUrl(audioUrl);
-    } catch (error: unknown) {
-      console.error("Fetch error:", error);
+    } catch (error: any) {
+      // Handle error based on status code
+      if (error instanceof Error) {
+        if (error.message.includes("status 403")) {
+          proModel.onOpen(); // Handle 403 Forbidden status
+        } else {
+          // Handle other types of errors
+          console.log("An unexpected error occurred:", error.message);
+        }
+      } else {
+        console.log("An unknown error occurred.");
+      }
     } finally {
       form.reset();
+      router.refresh();
     }
   };
 

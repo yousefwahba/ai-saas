@@ -15,8 +15,11 @@ import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { videoFormSchema } from "./constants";
+import { useProModel } from "@/hooks/use-pro-model";
 
 const VideoPage = () => {
+  const proModel = useProModel();
+
   const router = useRouter();
   const [video, setVideo] = useState<string>();
 
@@ -37,7 +40,8 @@ const VideoPage = () => {
 
       setVideo(response.data[0]);
     } catch (error: unknown) {
-      console.error(error);
+      if (axios.isAxiosError(error) && error?.response?.status === 403)
+        proModel.onOpen();
     } finally {
       form.reset();
       router.refresh();

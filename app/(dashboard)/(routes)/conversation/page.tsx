@@ -9,11 +9,20 @@ import { cn } from "@/lib/utils";
 import { useChat } from "ai/react";
 import { MessageSquare } from "lucide-react";
 import ReactMarkdown from "react-markdown";
+import { AxiosError, isAxiosError } from "axios";
+import { useProModel } from "@/hooks/use-pro-model";
 
 export default function ChatPage() {
+  const proModel = useProModel();
   const router = useRouter();
   const { messages, input, handleInputChange, handleSubmit } = useChat({
     api: "api/conversation",
+    onError(error) {},
+    onResponse: (response) => {
+      if (response?.status === 403) {
+        proModel.onOpen();
+      }
+    },
     onFinish: () => router.refresh(),
   });
 

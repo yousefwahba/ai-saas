@@ -52,9 +52,12 @@ export const ProModel = () => {
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant={"premium"} className="w-full">
+            <Button
+              variant={"premium"}
+              className="w-full border-0 focus:outline-none focus-visible:ring-0"
+            >
               Upgrade
-              <Zap className="w-4 h-4 ml-2 fill-white " />
+              <Zap className="w-4 h-4 ml-2 fill-white" />
             </Button>
           </DialogFooter>
         </DialogContent>

@@ -22,8 +22,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useProModel } from "@/hooks/use-pro-model";
 
 export default function ImagePage() {
+  const proModel = useProModel();
+
   const [images, setImages] = useState<string[]>([]);
   const router = useRouter();
 
@@ -44,8 +47,9 @@ export default function ImagePage() {
 
       setImages(response.data);
     } catch (error: unknown) {
-      if (axios.isAxiosError(error) && error?.response?.status === 403)
-        console.error(error);
+      if (axios.isAxiosError(error) && error?.response?.status === 403) {
+        proModel.onOpen();
+      }
     } finally {
       form.reset();
       router.refresh();
