@@ -26,7 +26,7 @@ const MobileSidebar = ({ apiLimitCount }: MobileSidebarProps) => {
           <Menu />
         </Button>
       </SheetTrigger>
-      <SheetContent side={"left"} className="p-0 ">
+      <SheetContent side={"left"} className="p-0 border-r-0 ">
         <Sidebar apiLimitCount={apiLimitCount} />
       </SheetContent>
     </Sheet>
