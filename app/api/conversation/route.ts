@@ -3,6 +3,8 @@ import { convertToCoreMessages, streamText } from "ai";
 import { increaseApiLimit, checkApiLimit } from "@/lib/api-limit";
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
+import { checkSubscription } from "@/lib/subscription";
+
 // Allow streaming responses up to 30 seconds
 export const maxDuration = 30;
 
@@ -18,7 +20,9 @@ export async function POST(req: Request) {
       return new NextResponse("Messages are required.", { status: 400 });
 
     const freeTrial = await checkApiLimit();
-    if (!freeTrial) {
+    const isPro = await checkSubscription();
+
+    if (!freeTrial && !isPro) {
       return new NextResponse("API limit exceeded.", { status: 403 });
     }
 
@@ -27,7 +31,9 @@ export async function POST(req: Request) {
       messages: convertToCoreMessages(messages),
     });
 
-    await increaseApiLimit();
+    if (!isPro) {
+      await increaseApiLimit();
+    }
 
     return result.toAIStreamResponse();
   } catch (error) {

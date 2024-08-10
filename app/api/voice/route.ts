@@ -1,4 +1,5 @@
 import { checkApiLimit, increaseApiLimit } from "@/lib/api-limit";
+import { checkSubscription } from "@/lib/subscription";
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
@@ -15,7 +16,9 @@ export async function POST(req: Request) {
       return new NextResponse("Prompt is required.", { status: 400 });
 
     const freeTrial = await checkApiLimit();
-    if (!freeTrial) {
+    const isPro = await checkSubscription();
+
+    if (!freeTrial && !isPro) {
       return new NextResponse("API limit exceeded.", { status: 403 });
     }
     const options = {
@@ -36,7 +39,9 @@ export async function POST(req: Request) {
       options
     );
 
-    await increaseApiLimit();
+    if (!isPro) {
+      await increaseApiLimit();
+    }
 
     if (!response.ok) {
       throw new Error(`Error: ${response.statusText}`);
