@@ -16,6 +16,7 @@ import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { videoFormSchema } from "./constants";
 import { useProModel } from "@/hooks/use-pro-model";
+import toast from "react-hot-toast";
 
 const VideoPage = () => {
   const proModel = useProModel();
@@ -42,6 +43,9 @@ const VideoPage = () => {
     } catch (error: unknown) {
       if (axios.isAxiosError(error) && error?.response?.status === 403)
         proModel.onOpen();
+      else {
+        toast.error("Something went wrong. Please try again later.");
+      }
     } finally {
       form.reset();
       router.refresh();

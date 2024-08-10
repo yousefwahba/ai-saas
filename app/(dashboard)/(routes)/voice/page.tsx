@@ -16,6 +16,7 @@ import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { voiceFormSchema } from "./constants";
 import { useProModel } from "@/hooks/use-pro-model";
+import toast from "react-hot-toast";
 
 const VoicePage = () => {
   const proModel = useProModel();
@@ -53,16 +54,10 @@ const VoicePage = () => {
       const audioUrl = URL.createObjectURL(audioBlob);
       setAudioUrl(audioUrl);
     } catch (error: any) {
-      // Handle error based on status code
-      if (error instanceof Error) {
-        if (error.message.includes("status 403")) {
-          proModel.onOpen(); // Handle 403 Forbidden status
-        } else {
-          // Handle other types of errors
-          console.log("An unexpected error occurred:", error.message);
-        }
+      if (error instanceof Error && error.message.includes("status 403")) {
+        proModel.onOpen();
       } else {
-        console.log("An unknown error occurred.");
+        toast.error("Something went wrong. Please try again later.");
       }
     } finally {
       form.reset();

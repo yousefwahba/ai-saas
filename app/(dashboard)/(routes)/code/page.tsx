@@ -8,19 +8,24 @@ import { useProModel } from "@/hooks/use-pro-model";
 import { cn } from "@/lib/utils";
 import { useChat } from "ai/react";
 import { Code } from "lucide-react";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 import ReactMarkdown from "react-markdown";
 
 export default function CodePage() {
   const proModel = useProModel();
-
+  const router = useRouter();
   const { messages, input, handleInputChange, handleSubmit } = useChat({
     api: "api/code",
-    onError(error) {},
+    onError(error) {
+      toast.error("Something went wrong. Please try again later.");
+    },
     onResponse: (response) => {
       if (response?.status === 403) {
         proModel.onOpen();
       }
     },
+    onFinish: () => router.refresh(),
   });
 
   return (

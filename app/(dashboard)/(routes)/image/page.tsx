@@ -23,6 +23,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useProModel } from "@/hooks/use-pro-model";
+import toast from "react-hot-toast";
 
 export default function ImagePage() {
   const proModel = useProModel();
@@ -49,6 +50,8 @@ export default function ImagePage() {
     } catch (error: unknown) {
       if (axios.isAxiosError(error) && error?.response?.status === 403) {
         proModel.onOpen();
+      } else {
+        toast.error("Something went wrong. Please try again later.");
       }
     } finally {
       form.reset();

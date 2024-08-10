@@ -16,6 +16,7 @@ import { cn } from "@/lib/utils";
 import { Check, Zap } from "lucide-react";
 import { Button } from "./ui/button";
 import axios from "axios";
+import toast from "react-hot-toast";
 export const ProModel = () => {
   const proModel = useProModel();
   const [loading, setLoading] = useState(false);
@@ -26,7 +27,7 @@ export const ProModel = () => {
       const response = await axios.get("/api/stripe");
       window.location.href = response.data.url;
     } catch (error) {
-      console.log("Stripe_client_error", error);
+      toast.error("Something went wrong. Please try again later.");
     } finally {
       setLoading(false);
     }
@@ -69,6 +70,7 @@ export const ProModel = () => {
           </DialogHeader>
           <DialogFooter>
             <Button
+              disabled={loading}
               onClick={onSubscribe}
               variant={"premium"}
               className="w-full border-0 focus:outline-none focus-visible:ring-0"
