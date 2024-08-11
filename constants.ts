@@ -1,6 +1,5 @@
 export const MAX_FREE_COUNTS = 5;
 import {
-  ArrowRight,
   AudioLines,
   Code,
   ImageIcon,

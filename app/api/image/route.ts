@@ -21,14 +21,11 @@ export async function POST(req: NextRequest) {
       return new NextResponse("Prompt is required.", { status: 400 });
 
     const input = {
-      cfg: 3.5,
-      steps: 28,
-      prompt: prompt,
-      aspect_ratio: "3:2",
+      prompt,
+      num_outputs: 1,
+      aspect_ratio: "1:1",
       output_format: "webp",
       output_quality: 90,
-      negative_prompt: "",
-      prompt_strength: 0.85,
     };
 
     const freeTrial = await checkApiLimit();
@@ -38,7 +35,7 @@ export async function POST(req: NextRequest) {
       return new NextResponse("API limit exceeded.", { status: 403 });
     }
 
-    const output = await replicate.run("stability-ai/stable-diffusion-3", {
+    const output = await replicate.run("black-forest-labs/flux-schnell", {
       input,
     });
 

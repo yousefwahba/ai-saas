@@ -1,23 +1,19 @@
-import { Button } from "@/components/ui/button"
-import Link from "next/link"
+import { LandingContent } from "@/components/landing-content";
+import { LandingFooter } from "@/components/landing-footer";
+import { LandingHero } from "@/components/landing-hero";
+import { LandingNavbar } from "@/components/landing-navbar";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 const LeandingPage = () => {
   return (
     <>
-    <div>Hellow world (un proteced)</div>
-    <Link href={"sign-in"}>
-      <Button >
-          Login
-      </Button>
-    </Link>
-    <Link href={"sign-up"}>
-      <Button >
-          Register
-      </Button>
-    </Link>
-
+      <LandingNavbar />
+      <LandingHero />
+      <LandingContent />
+      <LandingFooter />
     </>
-  )
-}
+  );
+};
 
-export default LeandingPage
+export default LeandingPage;
