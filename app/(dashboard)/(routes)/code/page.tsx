@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { useProModel } from "@/hooks/use-pro-model";
 import { cn } from "@/lib/utils";
 import { useChat } from "ai/react";
+import axios from "axios";
 import { Code } from "lucide-react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
@@ -18,7 +19,11 @@ export default function CodePage() {
   const { messages, input, handleInputChange, handleSubmit } = useChat({
     api: "api/code",
     onError(error) {
-      toast.error("Something went wrong. Please try again later.");
+      if (axios.isAxiosError(error) && error?.response?.status === 403) {
+        proModel.onOpen();
+      } else {
+        toast.error("Something went wrong. Please try again later.");
+      }
     },
     onResponse: (response) => {
       if (response?.status === 403) {

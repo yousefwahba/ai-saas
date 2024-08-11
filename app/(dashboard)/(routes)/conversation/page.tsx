@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 import { useChat } from "ai/react";
 import { MessageSquare } from "lucide-react";
 import ReactMarkdown from "react-markdown";
-import { AxiosError, isAxiosError } from "axios";
+import axios, { AxiosError, isAxiosError } from "axios";
 import { useProModel } from "@/hooks/use-pro-model";
 import toast from "react-hot-toast";
 
@@ -19,13 +19,13 @@ export default function ChatPage() {
   const { messages, input, handleInputChange, handleSubmit } = useChat({
     api: "api/conversation",
     onError(error) {
-      toast.error("Something went wrong. Please try again later.");
-    },
-    onResponse: (response) => {
-      if (response?.status === 403) {
+      if (axios.isAxiosError(error) && error?.response?.status === 403) {
         proModel.onOpen();
+      } else {
+        toast.error("Something went wrong. Please try again later.");
       }
     },
+
     onFinish: () => router.refresh(),
   });
 
