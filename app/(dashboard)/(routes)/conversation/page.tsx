@@ -9,7 +9,6 @@ import { cn } from "@/lib/utils";
 import { useChat } from "ai/react";
 import { MessageSquare } from "lucide-react";
 import ReactMarkdown from "react-markdown";
-import axios, { AxiosError, isAxiosError } from "axios";
 import { useProModel } from "@/hooks/use-pro-model";
 import toast from "react-hot-toast";
 
@@ -18,9 +17,10 @@ export default function ChatPage() {
   const router = useRouter();
   const { messages, input, handleInputChange, handleSubmit } = useChat({
     api: "api/conversation",
-    onError(error) {
-      if (axios.isAxiosError(error) && error?.response?.status === 403) {
+    onResponse: (response) => {
+      if (response?.status === 403) {
         proModel.onOpen();
+      } else if (response?.status === 200) {
       } else {
         toast.error("Something went wrong. Please try again later.");
       }

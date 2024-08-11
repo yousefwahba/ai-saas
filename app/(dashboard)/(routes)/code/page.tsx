@@ -18,16 +18,12 @@ export default function CodePage() {
   const router = useRouter();
   const { messages, input, handleInputChange, handleSubmit } = useChat({
     api: "api/code",
-    onError(error) {
-      if (axios.isAxiosError(error) && error?.response?.status === 403) {
-        proModel.onOpen();
-      } else {
-        toast.error("Something went wrong. Please try again later.");
-      }
-    },
     onResponse: (response) => {
       if (response?.status === 403) {
         proModel.onOpen();
+      } else if (response?.status === 200) {
+      } else {
+        toast.error("Something went wrong. Please try again later.");
       }
     },
     onFinish: () => router.refresh(),

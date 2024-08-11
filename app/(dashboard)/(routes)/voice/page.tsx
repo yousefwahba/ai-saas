@@ -46,7 +46,6 @@ const VoicePage = () => {
       });
 
       if (!response.ok) {
-        console.log(response);
         throw new Error(`Request failed with status ${response.status}`);
       }
 
