@@ -20,14 +20,6 @@ export async function POST(req: NextRequest) {
     if (!prompt)
       return new NextResponse("Prompt is required.", { status: 400 });
 
-    const input = {
-      prompt,
-      num_outputs: 1,
-      aspect_ratio: "1:1",
-      output_format: "webp",
-      output_quality: 90,
-    };
-
     const freeTrial = await checkApiLimit();
     const isPro = await checkSubscription();
 
@@ -35,9 +27,23 @@ export async function POST(req: NextRequest) {
       return new NextResponse("API limit exceeded.", { status: 403 });
     }
 
-    const output = await replicate.run("black-forest-labs/flux-schnell", {
-      input,
-    });
+    const output = await replicate.run(
+      "adirik/flux-cinestill:216a43b9975de9768114644bbf8cd0cba54a923c6d0f65adceaccfc9383a938f",
+      {
+        input: {
+          model: "dev",
+          prompt,
+          lora_scale: 0.6,
+          num_outputs: 1,
+          aspect_ratio: "1:1",
+          output_format: "webp",
+          guidance_scale: 3.5,
+          output_quality: 80,
+          extra_lora_scale: 0.8,
+          num_inference_steps: 28,
+        },
+      }
+    );
 
     if (!isPro) {
       await increaseApiLimit();
